@@ -1,0 +1,60 @@
+# Ambientes Virtuais
+env/
+.venv/
+venv/
+*/env/
+*/.venv/
+*/venv/
+ENV/
+*/ENV/
+
+# Caches e arquivos compilados do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Arquivos de distribuição/build
+/dist/
+/build/
+*.egg-info/
+*.egg
+
+# Arquivos de IDE/Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Arquivos de Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de Log
+*.log
+logs/
+
+# Banco de dados local (se não quiser versionar)
+database/
+*.sqlite3
+*.db
+
+# Arquivos de configuração local (ex: .env com segredos)
+.env
+*.env
+
+# Arquivos de teste/cobertura (depende da ferramenta)
+.pytest_cache/
+.coverage
+htmlcov/
+*.cover
+nosetests.xml
+coverage.xml
+
+# Outros
+*.pid
+*.seed
+*.out
+*.pid.*

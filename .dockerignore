@@ -1,0 +1,33 @@
+# Ignorar ambiente virtual
+env/
+.venv/
+venv/
+*/env/
+*/.venv/
+*/venv/
+
+# Ignorar caches do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar arquivos de configuração de IDE/Editor
+.vscode/
+.idea/
+*.swp
+
+# Ignorar arquivos Git
+.git/
+.gitignore
+
+# Ignorar arquivos de log locais (se houver)
+log/
+*.log
+
+# Ignorar banco de dados SQLite local (geralmente não incluído na imagem)
+database/
+*.sqlite3
+
+# Ignorar arquivos específicos do sistema operacional
+.DS_Store
+Thumbs.db
