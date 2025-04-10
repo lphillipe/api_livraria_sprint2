@@ -22,8 +22,8 @@ API REST desenvolvida em Flask (Python) para gerenciar o catálogo e estoque de 
 
 1.  **Clone o repositório** (se aplicável):
     ```bash
-    git clone <https://github.com/lphillipe/api_livraria_sprint2.git>
-    cd </api_livaria_sprint2>  
+    git clone https://github.com/lphillipe/api_livraria_sprint2.git
+    cd  api_livaria_sprint2 
     ```
 2.  **Crie um ambiente virtual:**
     * No Windows:
