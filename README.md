@@ -51,6 +51,20 @@ API REST desenvolvida em Flask (Python) para gerenciar o catálogo e estoque de 
     * A API estará acessível em `http://127.0.0.1:5000`.
     * A documentação interativa da API (Swagger UI / ReDoc) geralmente estará disponível em `http://127.0.0.1:5000/openapi`.
 
+## Arquitetura do Projeto:
+
+O fluxograma abaixo ilustra a arquitetura da aplicação em containers.
+
+```mermaid
+graph TD
+    FE["<i class='fab fa-docker'></i> Frontend (Container)"] -- Chamadas API --> BE;
+    BE["<i class='fab fa-docker'></i> Backend (Container)"] -- Acesso ao Banco --> DB;
+    %% Ou talvez fa:fa-docker FE -- ... --> BE ...
+    DB[(Banco de Dados SQLite)];
+    ExtAPI[API Externa];
+    BE -- Chamada Externa --> ExtAPI;
+```
+
 ## API Externa Utilizada
 
 * **Nome:** Google Books API
