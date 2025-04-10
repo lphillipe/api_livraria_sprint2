@@ -57,11 +57,11 @@ O fluxograma abaixo ilustra a arquitetura da aplicação em containers.
 
 ```mermaid
 graph TD
-    FE["<i class='fab fa-docker'></i> Frontend (Container)"] -- Chamadas API --> BE;
-    BE["<i class='fab fa-docker'></i> Backend (Container)"] -- Acesso ao Banco --> DB;
+    FE["<i class='fab fa-docker'></i> Frontend-Livraria (Container)"] -- Chamadas API --> BE;
+    BE["<i class='fab fa-docker'></i> API-Livraria (Container)"] -- Acesso ao Banco --> DB;
     %% Ou talvez fa:fa-docker FE -- ... --> BE ...
-    DB[(Banco de Dados SQLite)];
-    ExtAPI[API Externa];
+    DB[(SQLite)];
+    ExtAPI[API Externa Google Books];
     BE -- Chamada Externa --> ExtAPI;
 ```
 
