@@ -189,69 +189,48 @@ def del_livro(query: LivroBuscaSchema):
         logger.warning(f"Erro ao deletar um livro #'{livro_nome}', {error_msg}")
         return {"mesage": error_msg}, 404
 
+
 @app.put('/livro_update', tags=[livro_tag],
          responses={"200": LivroViewSchema, "404": ErrorSchema, "400": ErrorSchema})
-def update_livro(query: LivroBuscaSchema):
-    """Atualiza os dados de um Livro existente na base de dados, identificado pelo nome.
 
-    O nome do livro a ser atualizado é passado via query parameter.
-    O corpo da requisição (JSON) deve conter os novos dados: 'autor', 'quantidade' e 'valor'.
-
-    Retorna uma representação atualizada do livro.
+def update_livro(query: LivroBuscaSchema, body: LivroUpdateBodySchema):
+    """Atualiza os dados de um Livro existente (autor, quantidade, valor).
+       Nome via query parameter, novos dados via corpo JSON.
     """
-    # Pega o nome do livro a ser atualizado pela query string
     livro_nome_original = unquote(unquote(query.nome))
-    logger.debug(f"Recebida requisição para atualizar dados do livro: '{livro_nome_original}'")
+    logger.debug(f"PUT /livro_update: Atualizando '{livro_nome_original}'")
+    logger.debug(f"Dados recebidos no corpo: {body.dict()}") 
 
-    # Pega os dados enviados no corpo da requisição (espera-se JSON)
-    data = request.get_json()
+    
 
-    # Validação básica dos dados recebidos
-    if not data or not all(k in data for k in ('autor', 'quantidade', 'valor')):
-         error_msg = "Dados incompletos para atualização. Forneça 'autor', 'quantidade' e 'valor' no corpo JSON."
-         logger.warning(f"Erro ao atualizar livro '{livro_nome_original}': {error_msg}")
-         return {"mesage": error_msg}, 400
-
-    session = Session() # Abre a sessão ANTES do try/finally
+    session = Session()
     try:
-        # Busca o livro existente pelo nome original
         livro = session.query(Livro).filter(Livro.nome == livro_nome_original).first()
 
         if not livro:
-            # Se o livro não foi encontrado
-            error_msg = "Livro não encontrado na base :/"
             logger.warning(f"Erro ao atualizar: Livro '{livro_nome_original}' não encontrado.")
-            session.close() # Fecha a sessão antes de retornar
-            return {"mesage": error_msg}, 404
+            session.close()
+            return {"mesage": "Livro não encontrado na base :/"}, 404
         else:
-            # Atualiza os campos do objeto livro encontrado
-            logger.debug(f"Livro encontrado: '{livro.nome}'. Atualizando com dados: {data}")
-            livro.autor = data['autor']
-            livro.quantidade = int(data['quantidade']) # Converte para int
-            livro.valor = float(data['valor']) # Converte para float
+            # --- ATUALIZE USANDO OS DADOS DE 'body' ---
+            livro.autor = body.autor
+            livro.quantidade = body.quantidade # Já validado como int
+            livro.valor = body.valor       # Já validado como float
 
-            # Efetiva a atualização no banco de dados
             session.commit()
-            logger.debug(f"Livro '{livro_nome_original}' atualizado com sucesso para: {livro.autor}, {livro.quantidade}, {livro.valor}")
-            # Retorna a representação atualizada do livro
+            logger.debug(f"Livro '{livro_nome_original}' atualizado com sucesso.")
             return apresenta_livro(livro), 200
 
-    except ValueError:
-         # Erro na conversão de quantidade ou valor para número
-         error_msg = "Quantidade e/ou Valor inválidos. Devem ser numéricos."
-         logger.warning(f"Erro ao atualizar livro '{livro_nome_original}': {error_msg} - Dados recebidos: {data}")
-         session.rollback() # Desfaz quaisquer alterações na sessão
-         return {"mesage": error_msg}, 400
+    
+    except IntegrityError as e:
+         session.rollback()
+         logger.warning(f"Erro de integridade ao atualizar '{livro_nome_original}': {e}")
+         return {"mesage": "Erro de integridade ao atualizar."}, 409 
     except Exception as e:
-        # Caso ocorra qualquer outro erro inesperado
-        error_msg = "Não foi possível atualizar o livro no servidor."
-        logger.error(f"Erro inesperado ao atualizar livro '{livro_nome_original}': {e}", exc_info=True)
-        session.rollback() # Desfaz quaisquer alterações na sessão
-        return {"mesage": error_msg}, 400
+        session.rollback()
+        logger.error(f"Erro inesperado ao atualizar '{livro_nome_original}': {e}", exc_info=True)
+        return {"mesage": "Erro interno no servidor ao atualizar."}, 500
     finally:
-        # Garante que a sessão seja fechada em qualquer caso (sucesso ou erro)
         if session:
             session.close()
-            logger.debug("Sessão do banco de dados fechada.")
-
 

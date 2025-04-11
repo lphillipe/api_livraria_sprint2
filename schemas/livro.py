@@ -10,6 +10,12 @@ class LivroBuscaSchema(BaseModel):
     quantidade: Optional[int] = 1
     valor: float = 37.00
 
+class LivroUpdateBodySchema(BaseModel):
+    """ Define os dados esperados no corpo JSON para atualizar um livro. """
+    autor: str = "Machado de Assis " 
+    quantidade: int = 10                     
+    valor: float = 40.00                     
+
 class ListagemLivrosSchema(BaseModel):
     """ Define como uma listagem de livros será retornada.
     """
