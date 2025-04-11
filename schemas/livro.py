@@ -5,14 +5,13 @@ from model.livro import Livro
 class LivroBuscaSchema(BaseModel):
     """ Define como um novo livro a ser inserido deve ser representado
     """
-    nome: str = "Dom Casmurro"
-    #autor: str = "Machado de Assis"
+    nome: str = "O Pequeno Príncipe"
     quantidade: Optional[int] = 1
-    valor: float = 37.00
+    valor: float = 22.00
 
 class LivroUpdateBodySchema(BaseModel):
     """ Define os dados esperados no corpo JSON para atualizar um livro. """
-    autor: str = "Machado de Assis " 
+    autor: str = "Antoine de Saint-Exupéry" 
     quantidade: int = 10                     
     valor: float = 40.00                     
 
